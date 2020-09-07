@@ -1,0 +1,21 @@
+[package]
+name = "adsb-provider"
+version = "0.1.0"
+authors = ["Kevin Hoffman <alothien@gmail.com>"]
+edition = "2018"
+description = "Capability provider collects AVR messages from an SDR telnet server"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# Enable if the provider will be statically compiled into a host
+static_plugin = []
+
+
+[dependencies]
+wascc-codec = "0.8.0"
+log = "0.4.11"
+env_logger = "0.7.1"
+adsb = "0.2.3"
+serde = { version = "1.0.115", features = ["derive"] }

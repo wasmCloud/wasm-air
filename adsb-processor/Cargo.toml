@@ -1,0 +1,20 @@
+[package]
+name = "adsb-processor"
+version = "0.0.1"
+authors = ["Kevin Hoffman <alothien@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+wascc-actor = "0.7.2"
+serde = {version = "1.0.115", features = ["derive"]}
+eventsourcing = "0.1.5"
+eventsourcing-derive = "0.1.3"
+serde_json = "1.0.57"
+
+[profile.release]
+# Optimize for small code size
+opt-level = "s"
+lto = true

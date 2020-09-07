@@ -1,0 +1,7 @@
+# Use this manifest file to start a host runtime for the ADS-B capability provider
+---
+actors: []    
+capabilities:
+    - path: ./adsb-provider/target/debug/libadsb_provider.so # Change this to the OS-specific version for your setup    
+bindings: []
+    

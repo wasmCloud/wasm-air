@@ -1,0 +1,20 @@
+# Use this runtime host manifest to start up an HTTP server to expose RESTful access
+# to the Wasm Air aircraft data
+# Acceptable URLs:
+# /aircraft (list of all planes observed)
+# /stations (list of all stations - will be one per processor-provider binding)
+---
+actors: 
+    - ./wasmair-rest/target/wasm32-unknown-unknown/debug/wasmair_rest_signed.wasm
+capabilities:
+    - path: ../wascc-host/examples/.assets/libwascc_httpsrv.so
+    - path: ../wascc-host/examples/.assets/libwascc_redis.so
+bindings:
+    - actor: "MCXRMUCARVNDTJXMXM7CFSYT4BUGE2ZBZ2G5V2IL6USK2WTCX6KUAPFU"  # Change this to match your local module ID
+      capability: "wascc:http_server"
+      values:
+        PORT: "8081"
+    - actor: "MCXRMUCARVNDTJXMXM7CFSYT4BUGE2ZBZ2G5V2IL6USK2WTCX6KUAPFU"  # Change this to match your local module ID
+      capability: "wascc:keyvalue"
+      values:
+        URL: redis://127.0.0.1:6379

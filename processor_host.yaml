@@ -1,0 +1,19 @@
+# Use this manifest file to start a host runtime for the ADS-B message processor actor
+---
+actors: 
+    - ./adsb-processor/target/wasm32-unknown-unknown/debug/adsb_processor_signed.wasm
+capabilities: 
+    - path: ../wascc-host/examples/.assets/libwascc_redis.so
+    - path: ../wascc-host/examples/.assets/libwascc_nats.so
+bindings:
+    - actor: "MAMK5DNMR74QQWU5IM7SZ6V4TDWBPEXBCVQKLYGQK4CGWEJWV5AU4R4N"  # Change this to match your local module ID      
+      capability: "sdr:adsb"
+      values:      
+    - actor: "MAMK5DNMR74QQWU5IM7SZ6V4TDWBPEXBCVQKLYGQK4CGWEJWV5AU4R4N"  # Change this to match your local module ID
+      capability: "wascc:keyvalue"
+      values:
+          URL: redis://127.0.0.1:6379
+    - actor: "MAMK5DNMR74QQWU5IM7SZ6V4TDWBPEXBCVQKLYGQK4CGWEJWV5AU4R4N"  # Change this to match your local module ID
+      capability: "wascc:messaging"
+      values:
+          URL: "nats://127.0.0.1:4222"
