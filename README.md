@@ -2,6 +2,9 @@
 
 **Wasm Air** is a use case scenario exploration to answer the question, "What would it be like to try and build a system like Flight Aware with waSCC, WebAssembly, and lattice?" We started out with the idea of enabling the collection and aggregation of [Automatic Dependent Surveillance-Broadcast (ADS-B)](https://www.faa.gov/nextgen/programs/adsb/faq/) signals. The next step was to figure out where the business logic would reside and what we would use for capability providers.
 
+**Figure 1** - _Demo of Real-Time Terminal UI Monitoring ADS-B Data from Multiple Sources_
+![Terminal Demo](./wasmair_demo.png)
+
 ## Components
 
 The following is a list of the main logical components of Wasm Air:
@@ -34,11 +37,11 @@ The [RESTful flight data service](./wasmair-rest) is also an actor written using
 * `/aircraft` - The current status of all aircraft discovered by the system, in aggregate. While there's no current functionality for limiting/filtering this data, that can be easily added.
 * `/stations` - Queries the list of all registered receiving stations (providers connected to a `dump1090` server).
 
-### Realtime UI (Website)
+### Realtime UI (Terminal)
 
-The [Realtime UI](./wasmair-web) is a website written in Phoenix & LiveView (Elixir/OTP). This website allows users to view a list of registered stations, navigate to a live view of each station's real-time data, and view a global aggregate of all live system data. The website gets its data via a combination of querying the RESTful flight data service and receiving live post-processing events from the event stream produced by the processor actors.
-
-The website can be deployed _anywhere_, no matter what scale your deployment is, so long as it has network connectivity to the flight data service and can subscribe to the appropriate message broker subjects for live events.
+The [Realtime Terminal UI](./terminal-ui) is a command line / shell application that monitors events on a **NATS** subject and updates
+the UI accordingly. This application be deployed and run _anywhere_ so long as it has access to the NATS server the other components
+are all using. 
 
 ## Strategies for Scale
 

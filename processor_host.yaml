@@ -9,6 +9,11 @@ bindings:
     - actor: "MAMK5DNMR74QQWU5IM7SZ6V4TDWBPEXBCVQKLYGQK4CGWEJWV5AU4R4N"  # Change this to match your local module ID      
       capability: "sdr:adsb"
       values:      
+        PORT: 30002
+        HOST: 192.168.1.39
+        STATION_ID: "kevin_lab"
+        STATION_NAME: "Kevin's Lab"
+        TIMEOUT: 30000
     - actor: "MAMK5DNMR74QQWU5IM7SZ6V4TDWBPEXBCVQKLYGQK4CGWEJWV5AU4R4N"  # Change this to match your local module ID
       capability: "wascc:keyvalue"
       values:

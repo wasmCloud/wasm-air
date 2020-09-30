@@ -91,7 +91,7 @@ impl From<ADSBMessageKind> for ADSBMessagePayload {
                 callsign,
             } => ADSBMessagePayload::AircraftIdentification {
                 emitter_category,
-                callsign: callsign.trim(),
+                callsign: callsign.trim().to_string(),
             },
             ADSBMessageKind::AirborneVelocity {
                 heading,

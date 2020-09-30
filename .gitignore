@@ -8,3 +8,5 @@
 .keys/
 account.nk
 module.nk
+.idea
+target

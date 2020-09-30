@@ -10,3 +10,14 @@ The following must be in place in order to successfully run this provider in a w
 * A machine connected to an [RTL-SDR](https://www.rtl-sdr.com/) dongle and antenna combination with the appropriate device drivers. Consult the RTL SDR website for advice on purchasing devices, antennas, physical configuration, and device drivers and software installation for your equipment.
 
 Simply run `dump1090 --net` or `dump1090 --interactive --net` to start the telnet server required by this capability provider.
+
+## Actor Bindings
+
+When binding an actor to this capability provider, supply the following values to allow the capability
+provider to connect to a `dump1090` telnet server:
+
+* `PORT` - port number of the `dump1090` process (default `30002`)
+* `HOST` - the host IP on which the `dump1090` process is running
+* `STATION_ID` - the unique station ID that corresponds to the dump 1090 process
+* `STATION_NAME` - human-readable name of the station to which this binding is connecting
+* `TIMEOUT` - socket timeout period in milliseconds (default `30000` , 30 seconds)

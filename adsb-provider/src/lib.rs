@@ -21,7 +21,6 @@ const REVISION: u32 = 0;
 
 use adsb::Message;
 use adsbtypes::ADSBMessage;
-use std::env::var;
 use std::io::BufRead;
 use std::io::BufReader;
 use std::net::{SocketAddr, TcpStream};
@@ -43,11 +42,6 @@ capability_provider!(AdsbProvider, AdsbProvider::new);
 
 pub struct AdsbProvider {
     dispatcher: Arc<RwLock<Box<dyn Dispatcher>>>,
-    port: u16,
-    timeout: u64,
-    host: String,
-    station_name: String,
-    station_id: String,
 }
 
 impl AdsbProvider {
@@ -57,23 +51,6 @@ impl AdsbProvider {
             Err(_) => {}
         };
         AdsbProvider {
-            host: var(CONFIG_HOST).ok().unwrap_or("127.0.0.1".to_string()),
-            port: var(CONFIG_PORT)
-                .ok()
-                .unwrap_or("30002".to_string())
-                .parse()
-                .unwrap(),
-            timeout: var(CONFIG_TIMEOUT)
-                .ok()
-                .unwrap_or("30000".to_string())
-                .parse()
-                .unwrap(),
-            station_name: var(CONFIG_STATION_NAME)
-                .ok()
-                .unwrap_or("Unnamed Station".to_string()),
-            station_id: var(CONFIG_STATION_ID)
-                .ok()
-                .unwrap_or("station001".to_string()),
             dispatcher: Arc::new(RwLock::new(Box::new(NullDispatcher::new()))),
         }
     }
@@ -82,14 +59,14 @@ impl AdsbProvider {
         &self,
         config: CapabilityConfiguration,
     ) -> Result<Vec<u8>, Box<dyn Error + Sync + Send>> {
-        let host = self.host.to_string();
-        let port = self.port;
-        let timeout = self.timeout;
-        let station_id = self.station_id.to_string();
-        let station_name = self.station_name.to_string();
+        let host = config.values.get(CONFIG_HOST).unwrap_or(&"127.0.0.1".to_string()).to_string();
+        let port: u16 = config.values[CONFIG_PORT].parse().unwrap_or(30002);
+        let timeout: u64 = config.values[CONFIG_TIMEOUT].parse().unwrap_or(30000);
+        let station_id = config.values.get(CONFIG_STATION_ID).unwrap_or(&"station001".to_string()).to_string();
+        let station_name = config.values.get(CONFIG_STATION_NAME).unwrap_or(&"Unnamed Station".to_string()).to_string();
 
+        info!("Bound actor {} to 1090Mhz station source {} ({})", &config.module, &station_name, &station_id);
         let d = self.dispatcher.clone();
-        trace!("Configured actor {}", &config.module);
         thread::spawn(move || {
             consume_adsb(
                 d,
@@ -118,7 +95,7 @@ impl AdsbProvider {
         Ok(serialize(
             CapabilityDescriptor::builder()
                 .id(CAPABILITY_ID)
-                .name("ADS-B Broadcast Capability Provider") // TODO: change this friendly name
+                .name("ADS-B Broadcast Capability Provider")
                 .long_description(
                     "Capability provider connects to a dump1090 or similar AVR broadcaster and delivers messages to bound actors")
                 .version(VERSION)
@@ -204,10 +181,7 @@ impl CapabilityProvider for AdsbProvider {
         let mut lock = self.dispatcher.write().unwrap();
         *lock = dispatcher;
 
-        info!(
-            "ADS-B Capability Provider Ready ({}, {})",
-            self.station_id, self.station_name
-        );
+        info!("ADS-B Capability Provider Ready");
 
         Ok(())
     }

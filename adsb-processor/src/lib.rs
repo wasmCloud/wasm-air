@@ -10,7 +10,7 @@ const OP_MESSAGE_RECEIVED: &str = "MessageReceived";
 const EVENTS_SUBJECT: &str = "adsb.events";
 const STATION_LIST_KEY: &str = "adsb:stations";
 const AIRCRAFT_SET_KEY: &str = "adsb:aircraft";
-const AIRCRAFT_EXPIRATION_SECONDS: u32 = 60 * 60; // 60 minutes
+const AIRCRAFT_EXPIRATION_SECONDS: u32 = 10 * 60; // 10 minutes
 
 use actor::prelude::*;
 use adsbtypes::ADSBMessage;
